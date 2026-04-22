@@ -1,10 +1,10 @@
 const CACHE_NAME = 'taskflow-v1';
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/index.css',
-  '/index.js',
-  '/manifest.json',
+  '/task-app/',
+  '/task-app/index.html',
+  '/task-app/index.css',
+  '/task-app/index.js',
+  '/task-app/manifest.json',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js',
   'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css',
   'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css',
