@@ -1,0 +1,11 @@
+{
+  "tasks": [],
+  "progressLogs": [],
+  "missedLogs": [],
+  "settings": {
+    "defaultInterval": 2,
+    "defaultUnit": "",
+    "notif": false,
+    "sound": false
+  }
+}

@@ -3,220 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <title>TaskFlow</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#6c28d9">
+    <meta name="description" content="A progressive web app to track your daily tasks and habits">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%236c28d9' width='192' height='192'/><text y='140' font-size='120' x='30'>✦</text></svg>">
+    
+    <!-- Apple/iOS Support -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TaskFlow">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%236c28d9' width='192' height='192'/><text y='140' font-size='120' x='30'>✦</text></svg>">
+    
+    <!-- Stylesheets -->
     <link rel="stylesheet" href="index.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="index.js" defer></script>
 </head>
-<body>
 
-<div class="toast-container" id="toastContainer"></div>
+    <body>
 
-<!-- HEADER -->
-<div class="app-header d-flex justify-content-between align-items-start" id="appHeader">
-  <div>
-    <div class="logo">TaskFlow <span>✦</span></div>
-    <div class="sub" id="headerDate"></div>
-  </div>
-  <div class="d-flex gap-2">
-    <button class="icon-btn" onclick="openTodaySummary()" title="Today's Summary"><i class="fa fa-chart-pie"></i></button>
-    <button class="icon-btn" onclick="requestNotifPermission()" title="Notifications" style="position:relative">
-      <i class="fa fa-bell"></i><span class="notif-dot" id="notifDot"></span>
-    </button>
-  </div>
-</div>
+        <div class="toast-container" id="toastContainer"></div>
 
-<!-- ============ SCREEN: DASHBOARD ============ -->
-<div class="screen active" id="screen-dashboard">
-  <div class="summary-strip" id="summaryStrip">
-    <div class="d-flex align-items-center gap-3">
-      <div class="flex-fill">
-        <div class="sum-label">Done Today</div>
-        <div class="d-flex align-items-end gap-1 mt-1">
-          <div class="sum-num" id="sumDone">0</div>
-          <div style="font-size:1rem;color:#9ca3af;padding-bottom:5px" id="sumTotal">/0</div>
+        <!-- HEADER -->
+        <div class="app-header d-flex  justify-content-between align-items-start" id="appHeader">
+            <div>
+                <div class="logo">TaskFlow <span>✦</span></div>
+                <div class="sub" id="headerDate"></div>
+            </div>
+            <div class="d-flex gap-2">
+                <button class="icon-btn" onclick="openTodaySummary()" title="Today's Summary"><i class="bi bi-clipboard-data"></i></button>
+                <button class="icon-btn" onclick="requestNotifPermission()" title="Notifications"
+                    style="position:relative">
+                    <i class="bi bi-bell"></i><span class="notif-dot" id="notifDot"></span>
+                </button>
+            </div>
         </div>
-        <div class="sum-cap" id="sumCap">Add your first task!</div>
-      </div>
-      <div class="divider-v"></div>
-      <div class="flex-fill text-center">
-        <div class="sum-label mb-2">Top Streak</div>
-        <div class="streak-badge"><i class="fa fa-fire"></i> <span id="bestStreak">0</span>d</div>
-        <div class="sum-cap mt-2" id="missedCount" style="color:#dc2626"></div>
-      </div>
-    </div>
-  </div>
-  <div id="missedBanner"></div>
-  <div class="sec-title">Today's Tasks</div>
-  <div id="dashTasks"></div>
-</div>
 
-<!-- ============ SCREEN: ADD/EDIT ============ -->
-<div class="screen" id="screen-add">
-  <div class="form-wrap">
-    <div class="page-hdr"><h2 id="addTitle">New Task</h2><p>Fill in the details below</p></div>
-    <div class="form-card">
-      <input type="hidden" id="editId"/>
-      <div class="mb-3">
-        <div class="flabel">Task Title</div>
-        <input class="finput" type="text" id="taskTitle" placeholder="e.g. Morning Workout"/>
-      </div>
-      <div class="mb-3">
-        <div class="flabel">Type</div>
-        <div class="toggle-group">
-          <button class="tgl-btn sel" id="btnNumeric" onclick="selType('numeric')"><i class="fa fa-hashtag me-1"></i>Numeric</button>
-          <button class="tgl-btn" id="btnDescriptive" onclick="selType('descriptive')"><i class="fa fa-pen me-1"></i>Descriptive</button>
+        <!-- ============ SCREEN: DASHBOARD ============ -->
+        <div class="screen active" id="screen-dashboard">
+            <div class="summary-strip" id="summaryStrip">
+                <div class="d-flex align-items-center gap-3">
+                    <div class="flex-fill">
+                        <div class="sum-label">Done Today</div>
+                        <div class="d-flex align-items-end gap-1 mt-1">
+                            <div class="sum-num" id="sumDone">0</div>
+                            <div style="font-size:1rem;color:#9ca3af;padding-bottom:5px" id="sumTotal">/0</div>
+                        </div>
+                        <div class="sum-cap" id="sumCap">Add your first task!</div>
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="flex-fill text-center">
+                        <div class="sum-label mb-2">Top Streak</div>
+                        <div class="streak-badge"><i class="fa fa-fire"></i> <span id="bestStreak">0</span>d</div>
+                        <div class="sum-cap mt-2" id="missedCount" style="color:#dc2626"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="missedBanner"></div>
+            <div class="sec-title">Today's Tasks</div>
+            <div id="dashTasks"></div>
         </div>
-      </div>
-      <div id="numericFields">
-        <div class="mb-3">
-          <div class="flabel">Daily Target</div>
-          <input class="finput" type="number" id="taskTarget" placeholder="e.g. 50" min="0"/>
+
+        <!-- ============ SCREEN: ADD/EDIT ============ -->
+        <div class="screen" id="screen-add">
+            <div class="form-wrap">
+                <div class="page-hdr">
+                    <h2 id="addTitle">New Task</h2>
+                    <p>Fill in the details below</p>
+                </div>
+                <div class="form-card">
+                    <input type="hidden" id="editId" />
+                    <div class="mb-3">
+                        <div class="flabel">Task Title</div>
+                        <input class="finput" type="text" id="taskTitle" placeholder="e.g. Morning Workout" />
+                    </div>
+                    <div class="mb-3">
+                        <div class="flabel">Type</div>
+                        <div class="toggle-group">
+                            <button class="tgl-btn sel" id="btnNumeric" onclick="selType('numeric')"><i
+                                    class="fa fa-hashtag me-1"></i>Numeric</button>
+                            <button class="tgl-btn" id="btnDescriptive" onclick="selType('descriptive')"><i
+                                    class="fa fa-pen me-1"></i>Descriptive</button>
+                        </div>
+                    </div>
+                    <div id="numericFields">
+                        <div class="mb-3">
+                            <div class="flabel">Daily Target</div>
+                            <input class="finput" type="number" id="taskTarget" placeholder="e.g. 50" min="0" />
+                        </div>
+                        <div class="mb-3">
+                            <div class="flabel">Unit (optional)</div>
+                            <input class="finput" type="text" id="taskUnit" placeholder="e.g. reps, mins, glasses" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="flabel">Reminder Mode</div>
+                        <div class="toggle-group">
+                            <button class="tgl-btn sel" id="btnInterval" onclick="selReminder('interval')"><i
+                                    class="fa fa-rotate me-1"></i>Interval</button>
+                            <button class="tgl-btn" id="btnFixed" onclick="selReminder('fixed')"><i
+                                    class="fa fa-clock me-1"></i>Fixed</button>
+                            <button class="tgl-btn" id="btnNone" onclick="selReminder('none')"><i
+                                    class="fa fa-bell-slash me-1"></i>None</button>
+                        </div>
+                    </div>
+                    <div id="intervalField" class="mb-3">
+                        <div class="flabel">Every (hours)</div>
+                        <input class="finput" type="number" id="intervalVal" placeholder="e.g. 2" min="0.25"
+                            step="0.25" />
+                    </div>
+                    <div id="fixedField" class="mb-3" style="display:none">
+                        <div class="flabel">Reminder Times (add multiple)</div>
+                        <div class="time-chips" id="timeChips"></div>
+                        <div class="add-time-row">
+                            <input class="finput" type="time" id="newTimeInput" />
+                            <button class="add-time-btn" onclick="addFixedTime()"><i
+                                    class="fa fa-plus me-1"></i>Add</button>
+                        </div>
+                    </div>
+                    <button class="save-btn mt-2" onclick="saveTask()">Save Task</button>
+                    <button class="del-btn" id="delBtn" onclick="deleteTask()" style="display:none"><i
+                            class="fa fa-trash me-1"></i>Delete Task</button>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-          <div class="flabel">Unit (optional)</div>
-          <input class="finput" type="text" id="taskUnit" placeholder="e.g. reps, mins, glasses"/>
+
+        <!-- ============ SCREEN: HISTORY ============ -->
+        <div class="screen" id="screen-history">
+            <div class="page-hdr">
+                <h2>History</h2>
+                <p>Day-wise progress logs</p>
+            </div>
+            <div class="mx-card mb-2">
+                <select class="finput" id="histFilter" onchange="renderHistory()">
+                    <option value="">All Tasks</option>
+                </select>
+            </div>
+            <div id="histContainer"></div>
         </div>
-      </div>
-      <div class="mb-3">
-        <div class="flabel">Reminder Mode</div>
-        <div class="toggle-group">
-          <button class="tgl-btn sel" id="btnInterval" onclick="selReminder('interval')"><i class="fa fa-rotate me-1"></i>Interval</button>
-          <button class="tgl-btn" id="btnFixed" onclick="selReminder('fixed')"><i class="fa fa-clock me-1"></i>Fixed</button>
-          <button class="tgl-btn" id="btnNone" onclick="selReminder('none')"><i class="fa fa-bell-slash me-1"></i>None</button>
+
+        <!-- ============ SCREEN: STATS ============ -->
+        <div class="screen" id="screen-stats">
+            <div class="page-hdr">
+                <h2>Analytics</h2>
+                <p>Your weekly trends & performance</p>
+            </div>
+            <div class="stats-grid" id="statsGrid"></div>
+            <div class="weekly-bar-wrap">
+                <h3>This Week — Logs per Day</h3>
+                <div class="bar-row" id="weeklyBars"></div>
+            </div>
+            <div class="task-perf-card">
+                <h3>Task Performance</h3>
+                <div id="taskPerf"></div>
+            </div>
         </div>
-      </div>
-      <div id="intervalField" class="mb-3">
-        <div class="flabel">Every (hours)</div>
-        <input class="finput" type="number" id="intervalVal" placeholder="e.g. 2" min="0.25" step="0.25"/>
-      </div>
-      <div id="fixedField" class="mb-3" style="display:none">
-        <div class="flabel">Reminder Times (add multiple)</div>
-        <div class="time-chips" id="timeChips"></div>
-        <div class="add-time-row">
-          <input class="finput" type="time" id="newTimeInput"/>
-          <button class="add-time-btn" onclick="addFixedTime()"><i class="fa fa-plus me-1"></i>Add</button>
+
+        <!-- ============ SCREEN: SETTINGS ============ -->
+        <div class="screen" id="screen-settings">
+            <div class="page-hdr">
+                <h2>Settings</h2>
+                <p>Preferences & notifications</p>
+            </div>
+
+            <div class="settings-section-title">Notifications</div>
+            <div class="settings-card">
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Browser Notifications</div>
+                        <div class="setting-sub">Reminder alerts</div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" id="setNotif" onchange="saveSettings()"><span
+                            class="toggle-slider"></span></label>
+                </div>
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Sound Alerts</div>
+                        <div class="setting-sub">Beep on reminder</div>
+                    </div>
+                    <label class="toggle-switch"><input type="checkbox" id="setSound" onchange="saveSettings()"><span
+                            class="toggle-slider"></span></label>
+                </div>
+            </div>
+
+            <div class="settings-section-title">Defaults</div>
+            <div class="settings-card">
+                <div class="setting-row">
+                    <div style="flex:1">
+                        <div class="setting-label">Default Interval (hrs)</div>
+                        <div class="setting-sub">For new tasks</div>
+                    </div>
+                    <input class="finput" type="number" id="setDefaultInterval" style="width:70px;text-align:center"
+                        min="0.25" step="0.25" onchange="saveSettings()" />
+                </div>
+                <div class="setting-row">
+                    <div style="flex:1">
+                        <div class="setting-label">Default Unit</div>
+                        <div class="setting-sub">For numeric tasks</div>
+                    </div>
+                    <input class="finput" type="text" id="setDefaultUnit" style="width:80px;text-align:center"
+                        placeholder="reps" onchange="saveSettings()" />
+                </div>
+            </div>
+
+            <div class="settings-section-title">Data</div>
+            <div class="settings-card">
+                <div class="setting-row" onclick="selectDataFile()" style="cursor:pointer">
+                    <div>
+                        <div class="setting-label">Select Data File</div>
+                        <div class="setting-sub">Save JSON to a file</div>
+                    </div>
+                    <i class="fa fa-folder-open" style="color:var(--p2)"></i>
+                </div>
+                <div class="setting-row" onclick="importData()" style="cursor:pointer">
+                    <div>
+                        <div class="setting-label">Import JSON</div>
+                        <div class="setting-sub">Load data from file</div>
+                    </div>
+                    <i class="fa fa-upload" style="color:var(--p2)"></i>
+                </div>
+                <div class="setting-row" onclick="exportData()" style="cursor:pointer">
+                    <div>
+                        <div class="setting-label">Export JSON</div>
+                        <div class="setting-sub">Download all data</div>
+                    </div>
+                    <i class="fa fa-download" style="color:var(--p2)"></i>
+                </div>
+                <div class="setting-row" onclick="clearAllData()" style="cursor:pointer">
+                    <div>
+                        <div class="setting-label" style="color:#dc2626">Clear All Data</div>
+                        <div class="setting-sub">Cannot be undone</div>
+                    </div>
+                    <i class="fa fa-trash" style="color:#dc2626"></i>
+                </div>
+            </div>
         </div>
-      </div>
-      <button class="save-btn mt-2" onclick="saveTask()">Save Task</button>
-      <button class="del-btn" id="delBtn" onclick="deleteTask()" style="display:none"><i class="fa fa-trash me-1"></i>Delete Task</button>
-    </div>
-  </div>
-</div>
 
-<!-- ============ SCREEN: HISTORY ============ -->
-<div class="screen" id="screen-history">
-  <div class="page-hdr"><h2>History</h2><p>Day-wise progress logs</p></div>
-  <div class="mx-card mb-2">
-    <select class="finput" id="histFilter" onchange="renderHistory()">
-      <option value="">All Tasks</option>
-    </select>
-  </div>
-  <div id="histContainer"></div>
-</div>
+        <!-- FAB -->
+        <button class="fab" id="fabBtn" onclick="openAddTask()"><i class="bi bi-plus"></i></button>
 
-<!-- ============ SCREEN: STATS ============ -->
-<div class="screen" id="screen-stats">
-  <div class="page-hdr"><h2>Analytics</h2><p>Your weekly trends & performance</p></div>
-  <div class="stats-grid" id="statsGrid"></div>
-  <div class="weekly-bar-wrap">
-    <h3>This Week — Logs per Day</h3>
-    <div class="bar-row" id="weeklyBars"></div>
-  </div>
-  <div class="task-perf-card">
-    <h3>Task Performance</h3>
-    <div id="taskPerf"></div>
-  </div>
-</div>
+        <!-- BOTTOM NAV -->
+        <nav class="bottom-nav">
+            <button class="nav-item active" id="nav-dashboard" onclick="showScreen('dashboard')"><i
+                    class="fa fa-house"></i>Home</button>
+            <button class="nav-item" id="nav-stats" onclick="showScreen('stats')"><i
+                    class="fa fa-chart-line"></i>Stats</button>
+            <button class="nav-item" id="nav-history" onclick="showScreen('history')"><i
+                    class="fa fa-clock-rotate-left"></i>History</button>
+            <button class="nav-item" id="nav-settings" onclick="showScreen('settings')"><i
+                    class="fa fa-gear"></i>Settings</button>
+        </nav>
 
-<!-- ============ SCREEN: SETTINGS ============ -->
-<div class="screen" id="screen-settings">
-  <div class="page-hdr"><h2>Settings</h2><p>Preferences & notifications</p></div>
+        <!-- LOG MODAL -->
+        <div class="modal-overlay" id="logModal">
+            <div class="modal-sheet">
+                <div class="modal-handle"></div>
+                <div class="modal-title" id="logTitle">Log Progress</div>
+                <div class="modal-sub" id="logSub"></div>
+                <input type="hidden" id="logTaskId" />
+                <div id="numLogArea">
+                    <div class="flabel mb-1">Quick Add</div>
+                    <div class="quick-btns" id="quickBtns"></div>
+                    <div class="flabel mb-1 mt-2">Custom Value</div>
+                    <input class="finput" type="number" id="logVal" placeholder="Enter amount" min="0" />
+                </div>
+                <div id="descLogArea" style="display:none">
+                    <div class="flabel mb-1">Your Note</div>
+                    <textarea class="finput" id="logNote" placeholder="What did you do?"></textarea>
+                </div>
+                <div class="mt-2">
+                    <div class="flabel mb-1">Extra Note (optional)</div>
+                    <input class="finput" type="text" id="logExtra" placeholder="Optional note" />
+                </div>
+                <button class="modal-submit" onclick="submitLog()"><i class="fa fa-check me-1"></i>Save
+                    Progress</button>
+                <button class="cancel-link" onclick="closeModal('logModal')">Cancel</button>
+            </div>
+        </div>
 
-  <div class="settings-section-title">Notifications</div>
-  <div class="settings-card">
-    <div class="setting-row">
-      <div><div class="setting-label">Browser Notifications</div><div class="setting-sub">Reminder alerts</div></div>
-      <label class="toggle-switch"><input type="checkbox" id="setNotif" onchange="saveSettings()"><span class="toggle-slider"></span></label>
-    </div>
-    <div class="setting-row">
-      <div><div class="setting-label">Sound Alerts</div><div class="setting-sub">Beep on reminder</div></div>
-      <label class="toggle-switch"><input type="checkbox" id="setSound" onchange="saveSettings()"><span class="toggle-slider"></span></label>
-    </div>
-  </div>
+        <!-- TODAY SUMMARY MODAL -->
+        <div class="modal-overlay" id="summaryModal">
+            <div class="modal-sheet">
+                <div class="modal-handle"></div>
+                <div class="modal-title">Today's Summary</div>
+                <div class="modal-sub" id="sumModalDate"></div>
+                <div id="sumModalBody" class="summary-modal-body"></div>
+                <button class="cancel-link" onclick="closeModal('summaryModal')">Close</button>
+            </div>
+        </div>
 
-  <div class="settings-section-title">Defaults</div>
-  <div class="settings-card">
-    <div class="setting-row">
-      <div style="flex:1"><div class="setting-label">Default Interval (hrs)</div><div class="setting-sub">For new tasks</div></div>
-      <input class="finput" type="number" id="setDefaultInterval" style="width:70px;text-align:center" min="0.25" step="0.25" onchange="saveSettings()"/>
-    </div>
-    <div class="setting-row">
-      <div style="flex:1"><div class="setting-label">Default Unit</div><div class="setting-sub">For numeric tasks</div></div>
-      <input class="finput" type="text" id="setDefaultUnit" style="width:80px;text-align:center" placeholder="reps" onchange="saveSettings()"/>
-    </div>
-  </div>
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('✅ Service Worker registered:', registration);
+                    })
+                    .catch((error) => {
+                        console.warn('Service Worker registration failed:', error);
+                    });
+            });
+        }
+    </script>
 
-  <div class="settings-section-title">Data</div>
-  <div class="settings-card">
-    <div class="setting-row" onclick="exportData()" style="cursor:pointer">
-      <div><div class="setting-label">Export JSON</div><div class="setting-sub">Download all data</div></div>
-      <i class="fa fa-download" style="color:var(--p2)"></i>
-    </div>
-    <div class="setting-row" onclick="clearAllData()" style="cursor:pointer">
-      <div><div class="setting-label" style="color:#dc2626">Clear All Data</div><div class="setting-sub">Cannot be undone</div></div>
-      <i class="fa fa-trash" style="color:#dc2626"></i>
-    </div>
-  </div>
-</div>
+    </body>
 
-<!-- FAB -->
-<button class="fab" id="fabBtn" onclick="openAddTask()"><i class="fa fa-plus"></i></button>
-
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav">
-  <button class="nav-item active" id="nav-dashboard" onclick="showScreen('dashboard')"><i class="fa fa-house"></i>Home</button>
-  <button class="nav-item" id="nav-stats" onclick="showScreen('stats')"><i class="fa fa-chart-line"></i>Stats</button>
-  <button class="nav-item" id="nav-history" onclick="showScreen('history')"><i class="fa fa-clock-rotate-left"></i>History</button>
-  <button class="nav-item" id="nav-settings" onclick="showScreen('settings')"><i class="fa fa-gear"></i>Settings</button>
-</nav>
-
-<!-- LOG MODAL -->
-<div class="modal-overlay" id="logModal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="logTitle">Log Progress</div>
-    <div class="modal-sub" id="logSub"></div>
-    <input type="hidden" id="logTaskId"/>
-    <div id="numLogArea">
-      <div class="flabel mb-1">Quick Add</div>
-      <div class="quick-btns" id="quickBtns"></div>
-      <div class="flabel mb-1 mt-2">Custom Value</div>
-      <input class="finput" type="number" id="logVal" placeholder="Enter amount" min="0"/>
-    </div>
-    <div id="descLogArea" style="display:none">
-      <div class="flabel mb-1">Your Note</div>
-      <textarea class="finput" id="logNote" placeholder="What did you do?"></textarea>
-    </div>
-    <div class="mt-2">
-      <div class="flabel mb-1">Extra Note (optional)</div>
-      <input class="finput" type="text" id="logExtra" placeholder="Optional note"/>
-    </div>
-    <button class="modal-submit" onclick="submitLog()"><i class="fa fa-check me-1"></i>Save Progress</button>
-    <button class="cancel-link" onclick="closeModal('logModal')">Cancel</button>
-  </div>
-</div>
-
-<!-- TODAY SUMMARY MODAL -->
-<div class="modal-overlay" id="summaryModal">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">Today's Summary</div>
-    <div class="modal-sub" id="sumModalDate"></div>
-    <div id="sumModalBody" class="summary-modal-body"></div>
-    <button class="cancel-link" onclick="closeModal('summaryModal')">Close</button>
-  </div>
-</div>
-
-</body>
 </html>
